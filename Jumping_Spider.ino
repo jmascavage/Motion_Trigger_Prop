@@ -5,8 +5,8 @@
 
 // establish pin constants
 long ConsoleBps = 19200;
-const int sensorTrigPin = 12;          // sensorTrigPin tells distance sensor to start/stop a reading
-const int sensorEchoPin = 13;          // sensorEchoPin is where distance sensor provides feedback
+const int sensorTrigPin = 14;          // sensorTrigPin tells distance sensor to start/stop a reading
+const int sensorEchoPin = 15;          // sensorEchoPin is where distance sensor provides feedback
 const int transistorGatePin = 39;      // transistorGatePin will flip the transistor to power the pneumatic solenoid valve's 12v power
 const int minTriggerDistance = 10;      // minimum distance, inches,  object must be away in order to trigger
 const int maxTriggerDistance = 72;      // maximum distance, inches, object must be away in order to trigger
@@ -18,7 +18,7 @@ const int soundTriggerPin = 30;       // soundTriggerPin is the pin # linked to 
 // establish variables for ultrasonic distance sensor
 long duration, inches, countOfHits, counter;
 
-boolean serialOn = false; //sometimes writing to Serial hangs board, so this flag turns off writing to Serial in log()
+boolean serialOn = true; //sometimes writing to Serial hangs board, so this flag turns off writing to Serial in log()
 #define RLED RED_LED
 #define GLED GREEN_LED
 #define BLED BLUE_LED
@@ -88,10 +88,10 @@ void loop() {
    delay(10);                           //slight delay to allow board to register the HIGH state
    digitalWrite(soundTriggerPin, LOW);  //trigger the sound
    delay(500);                          //give time for the pin to trigger
-   digitalWrite(soundTriggerPin, HIGH); //turn off sound - pin only needs to be triggered for a moment for sound to play
    
-   //stay in this state for 20 seconds
+   //stay in this state for a bit, playing sound...
    delay(risingDelayMillis);
+   digitalWrite(soundTriggerPin, HIGH); //turn off sound
    
    //lower body
    log("Lowering body...");
@@ -141,4 +141,3 @@ void log(String logLine)
 {
   if(serialOn) Serial.println(String(millis()) + ": " + logLine);
 }
-
